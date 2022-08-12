@@ -50,6 +50,13 @@ class CustomHiddenLayers(nn.Module):
         """
         return self.policy_net(features), self.value_net(features)
 
+    # add forward_actor and forward_critic
+    def forward_actor(self, features: th.Tensor) -> th.Tensor:
+        return self.policy_net(features)
+
+    def forward_critic(self, features: th.Tensor) -> th.Tensor:
+        return self.value_net(features)
+
 
 class CustomActorCriticPolicy(ActorCriticPolicy):
     def __init__(

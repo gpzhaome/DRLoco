@@ -253,8 +253,8 @@ def autolaunch_tensorboard(model_save_path, just_print_instructions=False):
 
     # automatically launch tensorboard
     import os, threading
-    tb_path = '/home/rustam/anaconda3/envs/torch/bin/tensorboard ' if is_remote() \
-        else '/home/rustam/.conda/envs/tensorflow/bin/tensorboard '
+    tb_path = 'home/guoping/anaconda3/envs/drgait/bin/tensorboard ' if is_remote() \
+        else '/home/guoping/anaconda3/envs/drgait/bin/tensorboard '
     tb_thread = threading.Thread(
         target=lambda: os.system(tb_path + '--logdir="' + model_save_path + 'tb_logs/"' + ' --bind_all'),
         daemon=True)

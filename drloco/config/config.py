@@ -35,7 +35,7 @@ USE_WANDB = True
 
 if USE_WANDB:
     # give your project a name
-    WB_PROJECT_NAME = 'drloco_models'
+    WB_PROJECT_NAME = 'test_drloco_models'
     # give the current run a name
     WB_RUN_NAME = f'CPU, PHASE, MIRR_PY'
     # describe your ideas/goals/changes related to the current run
