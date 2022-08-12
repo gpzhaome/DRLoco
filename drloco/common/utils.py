@@ -94,7 +94,7 @@ def change_plot_properties(font_size_delta=0, tick_size_delta=0,
     return font_size, tick_size, legend_fontsize
 
 
-def vec_env(env_id, num_envs=4, seed=33, norm_rew=True,
+def vec_env(env_id, num_envs=4, seed=33, norm_rew=False,
             load_path=None):
     '''creates environments, vectorizes them and sets different seeds
     :param norm_rew: reward should only be normalized during training
@@ -127,9 +127,44 @@ def vec_env(env_id, num_envs=4, seed=33, norm_rew=True,
     # normalize the observations and rewards of the environment
     # if a load_path was specified, load the running mean and std of obs and rets from this path
     if load_path is not None:
-        vec_normed = VecNormalize.load(load_path, vec_env)
+        vec_normed = VecNormalize(vec_env, norm_obs=False, norm_reward=norm_rew)
+        vec_normed.load(load_path, vec_env)
     else:
-        vec_normed = VecNormalize(vec_env, norm_obs=True, norm_reward=norm_rew)
+        vec_normed = VecNormalize(vec_env, norm_obs=False, norm_reward=norm_rew)
+
+    return vec_normed
+
+
+def vec_env_load(env_id, seed=33, norm_rew=False,
+            load_path=None):
+    '''creates environments, vectorizes them and sets different seeds
+    :param norm_rew: reward should only be normalized during training
+    :param load_path: if set, the VecNormalize environment will
+                      load the running means from this path.
+    :returns: VecNormalize (wrapped Subproc- or Dummy-VecEnv) '''
+
+    from drloco.mujoco.mimic_env import MimicEnv
+    from drloco.mujoco.monitor_wrapper import Monitor as EnvMonitor
+    from drloco.mujoco.config import env_map
+
+    def make_env_func(seed, rank):
+        def make_env():
+            # env = gym.make(env_name)
+            env = env_map[env_id]()
+            env.seed(seed + rank * 100)
+            if isinstance(env, MimicEnv):
+                # wrap a MimicEnv in the EnvMonitor
+                # has to be done before converting into a VecEnv!
+                env = EnvMonitor(env)
+            return env
+        return make_env
+
+    vec_env = DummyVecEnv([make_env_func(seed, 0)])
+
+    # normalize the observations and rewards of the environment
+    # if a load_path was specified, load the running mean and std of obs and rets from this path
+    vec_normed = VecNormalize(vec_env, norm_obs=False, norm_reward=norm_rew)
+    vec_normed.load(load_path, vec_env)
 
     return vec_normed
 
@@ -234,7 +269,7 @@ def save_pi_weights(model, name):
 def load_env(checkpoint, save_path, env_id):
     # load a single environment for evaluation
     env_path = save_path + f'envs/env_{checkpoint}'
-    env = vec_env(env_id, num_envs=1, norm_rew=False, load_path=env_path)
+    env = vec_env_load(env_id, norm_rew=False, load_path=env_path)
     # set the calculated running means for obs and rets
     # env.load(env_path)
     return env

@@ -88,7 +88,8 @@ def train():
         os.makedirs(cfg.save_path + 'envs')
 
     # setup environment
-    env = utils.vec_env(cfgl.ENV_ID, norm_rew=True, num_envs=cfg.n_envs)
+    # env = utils.vec_env(cfgl.ENV_ID, norm_rew=True, num_envs=cfg.n_envs)
+    env = utils.vec_env(cfgl.ENV_ID, norm_rew=False, num_envs=cfg.n_envs)
 
     # setup model/algorithm
     training_timesteps = int(cfg.mio_samples * 1e6)
