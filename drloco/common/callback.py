@@ -226,8 +226,9 @@ class TrainingMonitor(BaseCallback):
 
         ep_lens = self.env.get_attr('ep_lens')
         ep_lens = [ep_len for env_lens in ep_lens for ep_len in env_lens]
-        wandb.log({"_hist/ep_lens": wandb.Histogram(
-            np_histogram=np.histogram(ep_lens, bins=40))}, step=self.num_timesteps)
+        if cfgl.USE_WANDB:
+            wandb.log({"_hist/ep_lens": wandb.Histogram(
+                np_histogram=np.histogram(ep_lens, bins=40))}, step=self.num_timesteps)
 
         # difficult_rsi_phases = self.env.get_attr('difficult_rsi_phases')
         # difficult_rsi_phases = [phase for env_phases in difficult_rsi_phases for phase in env_phases]
@@ -239,8 +240,9 @@ class TrainingMonitor(BaseCallback):
             utils.log(f'Logstd after {int(self.num_timesteps/1e3)}k timesteps:',
                       [f'mean std: {mean_std}', f'std of stds: {std_of_stds}'])
         # log histograms
-        wandb.log({"_det_eval/1. walked distances": wandb.Histogram(
-        np_histogram=np.histogram(self.moved_distances, bins=20))}, step=self.num_timesteps)
+        if cfgl.USE_WANDB:
+            wandb.log({"_det_eval/1. walked distances": wandb.Histogram(
+                np_histogram=np.histogram(self.moved_distances, bins=20))}, step=self.num_timesteps)
 
 
     def save_model_if_good(self, mean_rew, ep_ret):

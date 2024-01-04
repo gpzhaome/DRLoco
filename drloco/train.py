@@ -19,6 +19,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.ppo.policies import MlpPolicy
 from drloco.custom.policies import CustomActorCriticPolicy
 
+import os
+# DLL error, only for WinOS
+os.add_dll_directory("C://Users//GuopingZhao//.mujoco//mujoco210//bin")
+
 # determine the name of saved models before (init) and after training (final)
 INIT_CHECKPOINT_SUFFIX = 'init'
 FINAL_CHECKPOINT_SUFFIX = 'final'
@@ -118,17 +122,17 @@ def train():
                        clip_range_vf=clip_range, clip_range=clip_range,
                        tensorboard_log=cfg.save_path + 'tb_logs/')
 
-    # init wandb when not debugging
-    if not cfgl.DEBUG: init_wandb(model)
+    # # init wandb when not debugging
+    # if not cfgl.DEBUG: init_wandb(model)
 
-    # print model path and modification parameters
-    utils.log('RUN DESCRIPTION: \n' + cfgl.WB_RUN_DESCRIPTION)
-    utils.log('Training started',
-              ['Model: ' + cfg.save_path, 'Modifications: ' + cfg.modification])
+    # # print model path and modification parameters
+    # utils.log('RUN DESCRIPTION: \n' + cfgl.WB_RUN_DESCRIPTION)
+    # utils.log('Training started',
+    #           ['Model: ' + cfg.save_path, 'Modifications: ' + cfg.modification])
 
-    # save model and weights before training
-    if not cfgl.DEBUG:
-        utils.save_model(model, cfg.save_path, INIT_CHECKPOINT_SUFFIX)
+    # # save model and weights before training
+    # if not cfgl.DEBUG:
+    #     utils.save_model(model, cfg.save_path, INIT_CHECKPOINT_SUFFIX)
 
     # train model
     model.learn(total_timesteps=training_timesteps, callback=TrainingMonitor())
