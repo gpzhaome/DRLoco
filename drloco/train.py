@@ -21,7 +21,7 @@ from drloco.custom.policies import CustomActorCriticPolicy
 
 import os
 # DLL error, only for WinOS
-os.add_dll_directory("C://Users//GuopingZhao//.mujoco//mujoco210//bin")
+# os.add_dll_directory("C://Users//GuopingZhao//.mujoco//mujoco210//bin")
 
 # determine the name of saved models before (init) and after training (final)
 INIT_CHECKPOINT_SUFFIX = 'init'
