@@ -87,6 +87,7 @@ if SPEED_CONTROL:
 
 # reset environment to get current state
 obs = env.reset()
+# obs = vec_env.reset()
 # env.activate_evaluation()
 
 # run the agent for 10k steps in the environment
