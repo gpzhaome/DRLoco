@@ -90,7 +90,7 @@ lr_scale = 1
 mio_samples = 8
 
 # how many parallel environments should be used to collect samples
-n_envs = 8 if utils.is_remote() and not cfg.DEBUG else 1
+n_envs = 32 if utils.is_remote() and not cfg.DEBUG else 1
 
 # Neural Network hidden layer sizes
 # and the corresponding activation functions

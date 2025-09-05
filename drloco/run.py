@@ -64,7 +64,8 @@ if FROM_PATH and not PLAYBACK_TRAJECS:
     # load the corresponding environment from path
     # necessary, to load the running mean and std of the observations.
     vec_env = load_env(checkpoint, PATH, cfgl.ENV_ID)
-    env = vec_env.envs[0]
+    # env = vec_env.envs[0]
+    env = vec_env  # TODO: check if it's correct
     # env.activate_evaluation()
 else:
     # create a new environment as specified in the config.py
