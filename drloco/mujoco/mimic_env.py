@@ -136,7 +136,7 @@ class MimicEnv(MujocoEnv, gym.utils.EzPickle):
         # not considering movement direction
         vel_vec = np.clip(vel_vec, -5.5, 5.5)
         # vel = np.linalg.norm(vel_vec)
-        vel = vel_vec[0]
+        vel = vel_vec[0]  # x: walking direction
         self.walked_distance += vel * 1 / self.control_freq
 
 
