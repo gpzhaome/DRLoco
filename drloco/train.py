@@ -23,6 +23,9 @@ import os
 # DLL error, only for WinOS
 # os.add_dll_directory("C://Users//GuopingZhao//.mujoco//mujoco210//bin")
 
+os.environ["WANDB_API_KEY"] = '513f93029bbdf8d205746270e23c21c8394d5a7c'
+os.environ["WANDB_MODE"] = "offline"
+
 # determine the name of saved models before (init) and after training (final)
 INIT_CHECKPOINT_SUFFIX = 'init'
 FINAL_CHECKPOINT_SUFFIX = 'final'
