@@ -135,7 +135,8 @@ class MimicEnv(MujocoEnv, gym.utils.EzPickle):
         # very roughly assuming maximum speed of about 20 km/h
         # not considering movement direction
         vel_vec = np.clip(vel_vec, -5.5, 5.5)
-        vel = np.linalg.norm(vel_vec)
+        # vel = np.linalg.norm(vel_vec)
+        vel = vel_vec[0]
         self.walked_distance += vel * 1 / self.control_freq
 
 

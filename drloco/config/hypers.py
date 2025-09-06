@@ -87,7 +87,7 @@ lr_final = 1 * (1e-6)
 lr_scale = 1
 
 # number of experiences to collect [in Millions]
-mio_samples = 8
+mio_samples = 16
 
 # how many parallel environments should be used to collect samples
 n_envs = 32 if utils.is_remote() and not cfg.DEBUG else 1

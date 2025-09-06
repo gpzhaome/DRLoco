@@ -7,6 +7,10 @@ import sys
 from os import getcwd
 sys.path.append(getcwd())
 
+import os
+# DLL error, only for WinOS
+os.add_dll_directory("C:/Users/GuopingZhao/.mujoco/mujoco210/bin")
+
 from drloco.mujoco.monitor_wrapper import Monitor
 from stable_baselines3 import PPO
 from drloco.common.utils import load_env, get_project_path
@@ -29,7 +33,7 @@ PLAYBACK_TRAJECS = False
 #   ..important: just specify the path to the folder,
 #   where the model/ and env/ folders of your agent are
 # path_agent = get_project_path() + 'models/dmm/cstm_pi/mim_trq_ff3d/8envs/ppo2/8mio/296-evaled-ret79'
-path_agent = get_project_path() + 'models/train/cstm_pi/mirr_py/StraightMimicWalker/1envs/8mio/806'
+path_agent = get_project_path() + 'models/train/cstm_pi/mirr_py/StraightMimicWalker/32envs/8mio/645'
 PATH = path_agent
 # we save multiple checkpoints during training. Which one should be used?
 # The name of the checkpoint is the text after 'model_' or 'env_'
@@ -66,6 +70,7 @@ if FROM_PATH and not PLAYBACK_TRAJECS:
     vec_env = load_env(checkpoint, PATH, cfgl.ENV_ID)
     # env = vec_env.envs[0]
     env = vec_env  # TODO: check if it's correct
+    env.render(mode="human")
     # env.activate_evaluation()
 else:
     # create a new environment as specified in the config.py
@@ -87,8 +92,8 @@ if SPEED_CONTROL:
     com_speeds = []
 
 # reset environment to get current state
-obs = env.reset()
-# obs = vec_env.reset()  # TODO: check if this is correct
+# obs = env.reset()
+obs = vec_env.reset()  # TODO: check if this is correct
 # env.activate_evaluation()
 
 # run the agent for 10k steps in the environment
@@ -99,8 +104,8 @@ for i in range(10000):
         # get actions from the loaded agent
         action, hid_states = model.predict(obs, deterministic=True)
         obs, reward, done, _ = env.step(action)
-        com_z_pos = env.get_COM_Z_position()
-        # com_z_pos = env.envs[0].get_COM_Z_position()
+        # com_z_pos = env.get_COM_Z_position()
+        com_z_pos = env.envs[0].get_COM_Z_position()
     else:
         # get a random action, if no agent was loaded
         # here, you can also specify your own custom actions (e.g. all zeros)
@@ -117,7 +122,7 @@ for i in range(10000):
     #     des_speeds.append(env.desired_walking_speed)
     #     com_speeds.append(env.get_qvel()[0])
 
-    if RENDER: env.render()
+    if RENDER: env.envs[0].render()
     if done: env.reset()
 
     # # in case speed control was active, compare the desired and actual velocities
