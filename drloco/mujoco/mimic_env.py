@@ -561,9 +561,7 @@ class MimicEnv(MujocoEnv, gym.utils.EzPickle):
 
         # sanity check: reward should be around 1 after initialization
         rew = self.get_imitation_reward()
-        # assert rew > 0.95 * cfg.rew_scale, \
-        #     f"Reward should be around 1 after RSI, but was {rew}!"
-        assert rew > 0.95, \
+        assert rew > 0.95 * cfg.rew_scale, \
             f"Reward should be around 1 after RSI, but was {rew}!"
 
         # set the reference trajectories to the next state,
