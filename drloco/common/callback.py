@@ -153,10 +153,14 @@ class TrainingMonitor(BaseCallback):
         self.log_scalar('_train/1. moved distance [m]',moved_distance),
         self.log_scalar('_train/2. episode length [%] (smoothed 0.75)',
                          ep_len/cfg.ep_dur_max),
+        # self.log_scalar('_train/3. step reward [] (smoothed 0.25)',
+        #                  (mean_rew-cfg.alive_bonus)/cfg.rew_scale),
         self.log_scalar('_train/3. step reward [] (smoothed 0.25)',
-                         (mean_rew-cfg.alive_bonus)/cfg.rew_scale),
+                        (mean_rew - cfg.alive_bonus)),
+        # self.log_scalar('_train/4. episode return [%] (smoothed 0.75)',
+                         # (ep_ret-ep_len*cfg.alive_bonus)/(cfg.ep_dur_max*cfg.rew_scale)),
         self.log_scalar('_train/4. episode return [%] (smoothed 0.75)',
-                         (ep_ret-ep_len*cfg.alive_bonus)/(cfg.ep_dur_max*cfg.rew_scale)),
+                        (ep_ret - ep_len * cfg.alive_bonus) / (cfg.ep_dur_max)),
 
         # log reward components
         mean_ep_pos_rew = self.get_mean('mean_ep_pos_rew_smoothed')
@@ -260,7 +264,7 @@ class TrainingMonitor(BaseCallback):
             # print('Model Path: ', cfg.save_path)
 
         # normalize reward
-        mean_rew = (mean_rew - cfg.alive_bonus)/cfg.rew_scale
+        # mean_rew = (mean_rew - cfg.alive_bonus)/cfg.rew_scale
         mean_rew_thres = 0.4  \
                          + MEAN_REW_INCREMENT * (self.times_surpassed_mean_reward_threshold + 1)
         if mean_rew > (mean_rew_thres):
@@ -332,7 +336,7 @@ class TrainingMonitor(BaseCallback):
         # calculate the average mean reward
         self.mean_reward_means = np.mean(mean_rewards)
         # normalize it
-        self.mean_reward_means = (self.mean_reward_means - cfg.alive_bonus)/cfg.rew_scale
+        # self.mean_reward_means = (self.mean_reward_means - cfg.alive_bonus)/cfg.rew_scale
 
         # determine the amound of stable walks / episodes
         min_required_distance = cfgl.MIN_STABLE_DISTANCE

@@ -48,11 +48,12 @@ def is_mod(mod_str):
 rew_weights = [0.8, 0.2, 0, 0]
 
 # reward scaling (set to 1 to disable)
-rew_scale = 1
+rew_scale = 0.8
 
 # alive bonus is provided as reward for each step
 # the agent hasn't entered a terminal state
-alive_bonus = 0.2 * rew_scale
+# alive_bonus = 0.2 * rew_scale
+alive_bonus = 0.2
 
 # Early Termination: maximum steps in the environment per episode
 ep_dur_max = 3000
